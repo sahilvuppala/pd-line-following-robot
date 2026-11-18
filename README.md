@@ -1,5 +1,7 @@
-# pd-line-following-robot
-Closed-loop PD-controlled Line Following Robot built on Arduino Nano (ATmega328P) with L298N and IR sensor array.
+# PD-Based Line Following Robot (LFR)
+
+A closed-loop, Proportional-Derivative (PD) controlled Line Following Robot built on an ATmega328P (Arduino Nano). Developed during Semester 1 to explore sensor calibration, differential drive kinematics, and real-time PID control tuning.
+
 ---
 
 ## Control Architecture
@@ -9,12 +11,12 @@ The robot uses an auto-calibration sweep at startup to map surface reflectance, 
 ```mermaid
 flowchart TD
     A[Power On & 3s Delay] --> B[Auto-Calibration Sweep]
-    B --> C[Read Line Position 0–7000]
-    C --> D{Position > 6700?}
+    B --> C[Read Line Position 0–4000]
+    C --> D{Position > 3700?}
     D -- Yes --> E[Sharp Right Pivot]
     D -- No --> F{Position < 300?}
     F -- Yes --> G[Sharp Left Pivot]
-    F -- No --> H[Calculate Error = Position - 3500]
+    F -- No --> H[Calculate Error = Position - 2000]
     H --> I[Compute PD Output: Kp*error + Kd*dError]
     I --> J[Constrain & Apply Motor PWM Speeds]
     E --> C
@@ -30,7 +32,7 @@ flowchart TD
 | :--- | :--- |
 | **Microcontroller** | Arduino Nano R3 (CH340, ATmega328P) |
 | **Motor Driver** | L298N Dual H-Bridge DC Motor Driver |
-| **Line Sensor** | IR Reflectance Sensor Array *(Firmware configured for 8-ch analog QTR-8A; prototyped with 5-ch TCRT5000 array)* |
+| **Line Sensor** | 5-Channel IR Reflectance Sensor Array |
 | **Chassis & Motors** | 2WD Acrylic Chassis with Dual Yellow BO Geared Motors |
 | **Power Supply** | 9V Battery with Snap Connector |
 
@@ -40,7 +42,7 @@ flowchart TD
 
 | Arduino Nano Pin | Connected Module | Function |
 | :--- | :--- | :--- |
-| `A0 – A7` | IR Sensor Array | Analog reflectance inputs |
+| `A0 – A4` | 5-Ch IR Sensor Array | Analog reflectance inputs |
 | `D5` | L298N `ENA` | Left Motor PWM speed control |
 | `D11` | L298N `IN1` | Left Motor direction control 1 |
 | `D12` | L298N `IN2` | Left Motor direction control 2 |
